@@ -14,5 +14,7 @@ jobs:
           python-version: "3.11"
       - name: Compile scripts
         run: python -m compileall -q skills/ai-writing-risk-review/scripts
+      - name: Run public contract tests
+        run: PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Run portable self-test
         run: PYTHONDONTWRITEBYTECODE=1 python skills/ai-writing-risk-review/scripts/self_test.py

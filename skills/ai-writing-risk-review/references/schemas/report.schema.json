@@ -8,7 +8,7 @@
   "properties": {
     "schema_version": {"const": "ai-writing-risk-review-report/v1"},
     "run_id": {"type": "string", "minLength": 1},
-    "candidate_version": {"const": "0.1.1"},
+    "candidate_version": {"const": "0.1.2"},
     "snapshot_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "layer_results": {
       "type": "object",

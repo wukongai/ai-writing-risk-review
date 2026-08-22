@@ -14,7 +14,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-CANDIDATE_VERSION = "0.1.1"
+CANDIDATE_VERSION = "0.1.2"
 MANIFEST_SCHEMA = "ai-writing-risk-review-manifest/v1"
 REPORT_SCHEMA = "ai-writing-risk-review-report/v1"
 PATCH_SCHEMA = "ai-writing-risk-review-patch-proposal/v1"

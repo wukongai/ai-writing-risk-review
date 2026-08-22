@@ -8,7 +8,7 @@
   "properties": {
     "schema_version": {"const": "ai-writing-risk-review-manifest/v1"},
     "run_id": {"type": "string", "minLength": 1},
-    "candidate_version": {"const": "0.1.1"},
+    "candidate_version": {"const": "0.1.2"},
     "document_source": {
       "type": "object",
       "additionalProperties": false,

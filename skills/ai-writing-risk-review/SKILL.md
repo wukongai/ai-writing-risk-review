@@ -57,8 +57,7 @@ description: Use when 用户要求检查普通文章、公众号、自媒体、�
 ## 验证
 
 ~~~bash
-PYTHONDONTWRITEBYTECODE=1 pytest -q tests/skills/author-voice-review/authenticity/test_generalized_profiles.py
-python3 {{skill_root}}/scripts/self_test.py
+PYTHONDONTWRITEBYTECODE=1 python3 "{{skill_root}}/scripts/self_test.py"
 ~~~
 
 结构测试通过只表示合同可运行；没有真实跨场景回归时，不宣称实际效果已经验证。

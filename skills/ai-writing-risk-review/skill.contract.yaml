@@ -3,7 +3,7 @@ kind: document_review
 owner: wukongai
 status: active
 scope: portable
-version: 0.1.1
+version: 0.1.2
 
 purpose: >-
   对 AI 辅助写作文本分别诊断机器化表达、创作贡献不足与证据归属风险，
