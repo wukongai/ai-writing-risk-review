@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic contract for the first two author-voice review modules.
+"""Deterministic contract for the three-layer AI writing risk review.
 
 The module validates agent-produced judgments. It does not infer authorship,
 estimate platform probability, rewrite articles, apply patches, or publish.
@@ -14,7 +14,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-CANDIDATE_VERSION = "0.1.0"
+CANDIDATE_VERSION = "0.1.1"
 MANIFEST_SCHEMA = "ai-writing-risk-review-manifest/v1"
 REPORT_SCHEMA = "ai-writing-risk-review-report/v1"
 PATCH_SCHEMA = "ai-writing-risk-review-patch-proposal/v1"
