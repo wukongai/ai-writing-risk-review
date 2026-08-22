@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ai-writing-risk-review-finding/v1",
+  "title": "Three-layer review finding",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["finding_id", "layer", "scope", "dimension", "severity", "claim", "article_anchor", "minimal_quote", "risk_mechanism", "local_calibration", "preserve_evidence_ids", "fact_dependency", "recheck_criterion", "expression_device", "neutral_gate_evidence"],
+  "properties": {
+    "finding_id": {"type": "string", "pattern": "^(AIT|CCR|EAR)-[0-9]{3}$"},
+    "layer": {"enum": ["ai_text_trace", "creative_contribution", "evidence_attribution"]},
+    "scope": {"enum": ["document", "corpus"]},
+    "dimension": {
+      "enum": ["formulaic_phrasing", "rhetorical_symmetry", "uniform_section_rhythm", "over_smoothed_reasoning", "generic_abstraction", "weak_original_increment", "repetition_and_padding", "assembly_or_repackaging", "weak_decision_ownership", "missing_process_or_method", "weak_source_traceability", "citation_or_attribution_gap", "fact_opinion_blurring", "unsupported_human_claim", "reuse_or_similarity_risk"]
+    },
+    "severity": {"enum": ["P0", "P1", "P2"]},
+    "claim": {"type": "string", "minLength": 1},
+    "article_anchor": {"$ref": "#/$defs/anchor"},
+    "minimal_quote": {"type": "string", "minLength": 1},
+    "risk_mechanism": {"type": "string", "minLength": 1},
+    "local_calibration": {"type": "string", "minLength": 1},
+    "preserve_evidence_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^HCE-[0-9]{3}$"}},
+    "fact_dependency": {"type": "string", "minLength": 1},
+    "recheck_criterion": {"type": "string", "minLength": 1},
+    "expression_device": {"enum": ["none", "golden_sentence", "cognitive_reversal", "parallelism", "short_sentence", "column_rhythm", "headline_rhythm", "concise_lead", "disciplinary_term", "required_structure", "quoted_definition"]},
+    "neutral_gate_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cross_section_mechanical_reuse": {"type": "boolean"},
+        "same_function_repeated": {"type": "boolean"},
+        "no_new_fact_judgment_or_progression": {"type": "boolean"}
+      }
+    }
+  },
+  "$defs": {
+    "anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start_line", "end_line"],
+      "properties": {
+        "start_line": {"type": "integer", "minimum": 1},
+        "end_line": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "profile_id": "academic",
+  "display_name": "论文与研究综述",
+  "default_review_scope": "body_only",
+  "enabled_layers": ["ai_text_trace", "creative_contribution", "evidence_attribution"],
+  "focus_dimensions": ["citation_or_attribution_gap", "weak_source_traceability", "unsupported_human_claim", "reuse_or_similarity_risk"],
+  "required_inputs": ["document"],
+  "optional_inputs": ["references", "assignment_requirements", "research_notes", "method_records"],
+  "protected_expression_devices": ["disciplinary_term", "required_structure", "quoted_definition"],
+  "forbidden_goals": ["detector_evasion", "ghostwriting", "fabricated_research", "fabricated_citation"],
+  "comparison_policy": {"minimum_items": 1, "maximum_items": 20}
+}

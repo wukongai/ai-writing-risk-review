@@ -1,0 +1,12 @@
+{
+  "profile_id": "public-content",
+  "display_name": "公开内容",
+  "default_review_scope": "body_only",
+  "enabled_layers": ["ai_text_trace", "creative_contribution", "evidence_attribution"],
+  "focus_dimensions": ["weak_original_increment", "reuse_or_similarity_risk", "weak_source_traceability"],
+  "required_inputs": ["document"],
+  "optional_inputs": ["source_materials", "recent_publications", "platform_policy_snapshot"],
+  "protected_expression_devices": ["golden_sentence", "cognitive_reversal", "parallelism", "short_sentence", "column_rhythm"],
+  "forbidden_goals": ["platform_probability", "detector_evasion", "account_weight_prediction"],
+  "comparison_policy": {"minimum_items": 3, "maximum_items": 20}
+}

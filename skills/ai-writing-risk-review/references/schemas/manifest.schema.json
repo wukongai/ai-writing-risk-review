@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ai-writing-risk-review-manifest/v1",
+  "title": "AI writing risk review manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "candidate_version", "document_source", "snapshot_sha256", "snapshot_lines", "review_scope", "review_context", "profile_snapshot", "comparison_corpus"],
+  "properties": {
+    "schema_version": {"const": "ai-writing-risk-review-manifest/v1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "candidate_version": {"const": "0.1.0"},
+    "document_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "path"],
+      "properties": {
+        "kind": {"enum": ["file", "provided_text"]},
+        "path": {"type": "string", "minLength": 1}
+      }
+    },
+    "snapshot_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "snapshot_lines": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["line", "text"],
+        "properties": {
+          "line": {"type": "integer", "minimum": 1},
+          "text": {"type": "string"}
+        }
+      }
+    },
+    "review_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "start_line", "end_line"],
+      "properties": {
+        "mode": {"enum": ["body_only", "full_document"]},
+        "start_line": {"type": "integer", "minimum": 1},
+        "end_line": {"type": "integer", "minimum": 1}
+      }
+    },
+    "review_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_id", "document_kind", "requested_layers"],
+      "properties": {
+        "profile_id": {"enum": ["general", "public-content", "news", "academic", "custom"]},
+        "document_kind": {"type": "string", "minLength": 1},
+        "requested_layers": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {"enum": ["ai_text_trace", "creative_contribution", "evidence_attribution"]}
+        }
+      }
+    },
+    "profile_snapshot": {
+      "type": "object",
+      "required": ["profile_id", "enabled_layers", "protected_expression_devices", "forbidden_goals"],
+      "properties": {
+        "profile_id": {"type": "string"},
+        "enabled_layers": {"type": "array", "minItems": 1},
+        "protected_expression_devices": {"type": "array"},
+        "forbidden_goals": {"type": "array"}
+      }
+    },
+    "comparison_corpus": {"type": "array", "maxItems": 20, "items": {"type": "object"}}
+  }
+}

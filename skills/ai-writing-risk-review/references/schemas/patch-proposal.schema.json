@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ai-writing-risk-review-patch-proposal/v1",
+  "title": "User-confirmed local patch proposal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "snapshot_sha256", "selected_finding_ids", "preserve_evidence_ids", "changes"],
+  "properties": {
+    "schema_version": {"const": "ai-writing-risk-review-patch-proposal/v1"},
+    "snapshot_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "selected_finding_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^(AIT|CCR|EAR)-[0-9]{3}$"}
+    },
+    "preserve_evidence_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^HCE-[0-9]{3}$"}
+    },
+    "changes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["finding_id", "start_line", "end_line", "before", "after", "fact_dependency", "preserve_evidence_ids"],
+        "properties": {
+          "finding_id": {"type": "string", "pattern": "^(AIT|CCR|EAR)-[0-9]{3}$"},
+          "start_line": {"type": "integer", "minimum": 1},
+          "end_line": {"type": "integer", "minimum": 1},
+          "before": {"type": "string", "minLength": 1},
+          "after": {"type": "string"},
+          "fact_dependency": {"type": "string", "minLength": 1},
+          "preserve_evidence_ids": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^HCE-[0-9]{3}$"}
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI 写作痕迹与低创作度评审（候选）"
+  short_description: "跨文体诊断机器化表达、创作贡献与证据归属风险"
+  default_prompt: "Use $ai-writing-risk-review to review the selected document layers with evidence-backed findings."
+
+policy:
+  allow_implicit_invocation: true

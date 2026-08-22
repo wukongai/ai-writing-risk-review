@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ai-writing-risk-review-report/v1",
+  "title": "AI writing risk review report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "candidate_version", "snapshot_sha256", "layer_results", "human_creation_evidence", "findings", "evidence_coverage", "unused_inputs", "utility_claim"],
+  "properties": {
+    "schema_version": {"const": "ai-writing-risk-review-report/v1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "candidate_version": {"const": "0.1.0"},
+    "snapshot_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "layer_results": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 3,
+      "additionalProperties": false,
+      "properties": {
+        "ai_text_trace": {"$ref": "#/$defs/trace_panel"},
+        "creative_contribution": {"$ref": "#/$defs/contribution_panel"},
+        "evidence_attribution": {"$ref": "#/$defs/evidence_panel"}
+      }
+    },
+    "human_creation_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["evidence_id", "article_anchor", "minimal_quote", "preserve_reason"],
+        "properties": {
+          "evidence_id": {"type": "string", "pattern": "^HCE-[0-9]{3}$"},
+          "article_anchor": {"$ref": "#/$defs/anchor"},
+          "minimal_quote": {"type": "string", "minLength": 1},
+          "preserve_reason": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "findings": {"type": "array", "items": {"$ref": "finding.schema.json"}},
+    "evidence_coverage": {"type": "object"},
+    "unused_inputs": {"type": "array", "items": {"type": "string"}},
+    "requested_capabilities": {"type": "array", "items": {"type": "string"}},
+    "utility_claim": {"const": "not_evaluated"}
+  },
+  "$defs": {
+    "score": {"type": "integer", "minimum": 0, "maximum": 2},
+    "risk_level": {"enum": ["low", "medium", "high", "not_issued"]},
+    "confidence": {"enum": ["low", "medium", "high"]},
+    "anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start_line", "end_line"],
+      "properties": {
+        "start_line": {"type": "integer", "minimum": 1},
+        "end_line": {"type": "integer", "minimum": 1}
+      }
+    },
+    "panel_base": {
+      "type": "object",
+      "required": ["score_status", "scores", "risk_score", "risk_level", "confidence", "limitation"],
+      "properties": {
+        "score_status": {"enum": ["issued", "not_issued"]},
+        "risk_score": {"type": "integer", "minimum": 0, "maximum": 10},
+        "risk_level": {"$ref": "#/$defs/risk_level"},
+        "confidence": {"$ref": "#/$defs/confidence"},
+        "limitation": {"type": "string", "minLength": 1}
+      }
+    },
+    "trace_panel": {
+      "allOf": [
+        {"$ref": "#/$defs/panel_base"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["score_status", "scores", "risk_score", "risk_level", "confidence", "limitation"],
+          "properties": {
+            "score_status": {"enum": ["issued", "not_issued"]},
+            "scores": {"$ref": "#/$defs/trace_scores"},
+            "risk_score": {"type": "integer", "minimum": 0, "maximum": 10},
+            "risk_level": {"$ref": "#/$defs/risk_level"},
+            "confidence": {"$ref": "#/$defs/confidence"},
+            "limitation": {"type": "string", "minLength": 1}
+          }
+        }
+      ]
+    },
+    "contribution_panel": {
+      "allOf": [
+        {"$ref": "#/$defs/panel_base"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["score_status", "scores", "risk_score", "risk_level", "confidence", "limitation"],
+          "properties": {
+            "score_status": {"enum": ["issued", "not_issued"]},
+            "scores": {"$ref": "#/$defs/contribution_scores"},
+            "risk_score": {"type": "integer", "minimum": 0, "maximum": 10},
+            "risk_level": {"$ref": "#/$defs/risk_level"},
+            "confidence": {"$ref": "#/$defs/confidence"},
+            "limitation": {"type": "string", "minLength": 1}
+          }
+        }
+      ]
+    },
+    "evidence_panel": {
+      "allOf": [
+        {"$ref": "#/$defs/panel_base"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["score_status", "scores", "risk_score", "risk_level", "confidence", "limitation"],
+          "properties": {
+            "score_status": {"enum": ["issued", "not_issued"]},
+            "scores": {"$ref": "#/$defs/evidence_scores"},
+            "risk_score": {"type": "integer", "minimum": 0, "maximum": 10},
+            "risk_level": {"$ref": "#/$defs/risk_level"},
+            "confidence": {"$ref": "#/$defs/confidence"},
+            "limitation": {"type": "string", "minLength": 1}
+          }
+        }
+      ]
+    },
+    "trace_scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["formulaic_phrasing", "rhetorical_symmetry", "uniform_section_rhythm", "over_smoothed_reasoning", "generic_abstraction"],
+      "properties": {
+        "formulaic_phrasing": {"$ref": "#/$defs/score"},
+        "rhetorical_symmetry": {"$ref": "#/$defs/score"},
+        "uniform_section_rhythm": {"$ref": "#/$defs/score"},
+        "over_smoothed_reasoning": {"$ref": "#/$defs/score"},
+        "generic_abstraction": {"$ref": "#/$defs/score"}
+      }
+    },
+    "contribution_scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["weak_original_increment", "repetition_and_padding", "assembly_or_repackaging", "weak_decision_ownership", "missing_process_or_method"],
+      "properties": {
+        "weak_original_increment": {"$ref": "#/$defs/score"},
+        "repetition_and_padding": {"$ref": "#/$defs/score"},
+        "assembly_or_repackaging": {"$ref": "#/$defs/score"},
+        "weak_decision_ownership": {"$ref": "#/$defs/score"},
+        "missing_process_or_method": {"$ref": "#/$defs/score"}
+      }
+    },
+    "evidence_scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["weak_source_traceability", "citation_or_attribution_gap", "fact_opinion_blurring", "unsupported_human_claim", "reuse_or_similarity_risk"],
+      "properties": {
+        "weak_source_traceability": {"$ref": "#/$defs/score"},
+        "citation_or_attribution_gap": {"$ref": "#/$defs/score"},
+        "fact_opinion_blurring": {"$ref": "#/$defs/score"},
+        "unsupported_human_claim": {"$ref": "#/$defs/score"},
+        "reuse_or_similarity_risk": {"$ref": "#/$defs/score"}
+      }
+    }
+  }
+}

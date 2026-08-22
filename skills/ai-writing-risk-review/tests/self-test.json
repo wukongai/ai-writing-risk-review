@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "tests": [
+    {
+      "id": "three-layer-contract-and-boundary-test",
+      "script": "scripts/self_test.py",
+      "expected_exit": 0,
+      "stdout_json_keys": [
+        "ok",
+        "checks.valid_three_layer_report",
+        "checks.detector_evasion_rejected",
+        "checks.neutral_device_gate_enforced",
+        "checks.local_patch_shape_valid"
+      ],
+      "stdout_contains": ["\"ok\": true"],
+      "timeout_seconds": 10
+    }
+  ]
+}

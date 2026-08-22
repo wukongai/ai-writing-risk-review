@@ -1,0 +1,12 @@
+{
+  "profile_id": "general",
+  "display_name": "通用文章",
+  "default_review_scope": "body_only",
+  "enabled_layers": ["ai_text_trace", "creative_contribution", "evidence_attribution"],
+  "focus_dimensions": [],
+  "required_inputs": ["document"],
+  "optional_inputs": ["source_materials", "comparison_corpus"],
+  "protected_expression_devices": ["golden_sentence", "cognitive_reversal", "parallelism", "short_sentence"],
+  "forbidden_goals": ["detector_evasion", "fabricated_human_contribution"],
+  "comparison_policy": {"minimum_items": 1, "maximum_items": 20}
+}

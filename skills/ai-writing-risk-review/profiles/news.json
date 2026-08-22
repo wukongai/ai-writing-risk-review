@@ -1,0 +1,12 @@
+{
+  "profile_id": "news",
+  "display_name": "新闻与资讯",
+  "default_review_scope": "body_only",
+  "enabled_layers": ["ai_text_trace", "creative_contribution", "evidence_attribution"],
+  "focus_dimensions": ["weak_source_traceability", "citation_or_attribution_gap", "fact_opinion_blurring"],
+  "required_inputs": ["document"],
+  "optional_inputs": ["source_materials", "interview_records", "correction_history"],
+  "protected_expression_devices": ["headline_rhythm", "concise_lead", "parallelism"],
+  "forbidden_goals": ["fabricated_source", "fabricated_quote", "detector_evasion"],
+  "comparison_policy": {"minimum_items": 1, "maximum_items": 20}
+}

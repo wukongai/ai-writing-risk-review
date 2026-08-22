@@ -1,0 +1,120 @@
+name: ai-writing-risk-review
+kind: document_review
+owner: wukongai
+status: active
+scope: portable
+version: 0.1.0
+
+purpose: >-
+  对 AI 辅助写作文本分别诊断机器化表达、创作贡献不足与证据归属风险，
+  保护作者真实表达资产，并在逐条确认后提供局部修改提案。
+
+positive_triggers:
+  - ai_text_trace_review
+  - low_creation_risk_review
+  - formulaic_writing_review
+  - source_and_attribution_review
+  - document_similarity_review
+
+negative_triggers:
+  - ai_origin_probability
+  - detector_evasion
+  - ghostwriting
+  - fabricated_human_contribution
+  - bulk_rewrite_without_confirmation
+  - publish_without_preview
+
+profiles:
+  supported: [general, public-content, news, academic, custom]
+  default: general
+  editable_directory: profiles
+  changes_scoring_scale: false
+
+inputs:
+  required:
+    - {name: document_source, type: markdown_path_or_text}
+    - {name: profile_id, enum: [general, public-content, news, academic, custom]}
+    - {name: document_kind, type: non_empty_string}
+    - {name: requested_layers, subset: [ai_text_trace, creative_contribution, evidence_attribution]}
+  optional:
+    - {name: include_metadata, type: boolean, default: false}
+    - {name: source_materials, type: evidence_array}
+    - {name: comparison_corpus, type: document_snapshot_array, max_items: 20}
+    - {name: confirmed_human_evidence, type: evidence_array}
+    - {name: external_detector_signals, type: raw_provider_signal_array}
+    - {name: context_policy_snapshot, type: policy_snapshot}
+
+outputs:
+  - {name: manifest, schema: references/schemas/manifest.schema.json}
+  - {name: report, schema: references/schemas/report.schema.json}
+  - {name: rendered_report, template: assets/report-template.md}
+  - {name: patch_proposal, schema: references/schemas/patch-proposal.schema.json, gated: true}
+
+decisions:
+  review_scope:
+    default: body_only
+    full_document_requires_explicit_request: true
+    operational_metadata_can_create_finding: false
+  layers:
+    ai_text_trace:
+      dimensions: [formulaic_phrasing, rhetorical_symmetry, uniform_section_rhythm, over_smoothed_reasoning, generic_abstraction]
+    creative_contribution:
+      dimensions: [weak_original_increment, repetition_and_padding, assembly_or_repackaging, weak_decision_ownership, missing_process_or_method]
+    evidence_attribution:
+      dimensions: [weak_source_traceability, citation_or_attribution_gap, fact_opinion_blurring, unsupported_human_claim, reuse_or_similarity_risk]
+  allowed_dimension_scores: [0, 1, 2]
+  risk_mapping:
+    - {min: 0, max: 2, risk_level: low}
+    - {min: 3, max: 5, risk_level: medium}
+    - {min: 6, max: 10, risk_level: high}
+  aggregation:
+    cross_layer_average: forbidden
+    human_evidence_offset: forbidden
+    overall_score: forbidden
+
+expression_asset_gate:
+  protected_devices: [golden_sentence, cognitive_reversal, parallelism, short_sentence]
+  requires_all:
+    - cross_section_mechanical_reuse
+    - same_function_repeated
+    - no_new_fact_judgment_or_progression
+
+side_effects:
+  default: none
+  explicit_output_dir_only: true
+  forbidden:
+    - modify_document_without_exact_confirmation
+    - write_ob
+    - publish
+    - install_skill
+    - register_skill_hub
+
+approvals:
+  - {name: finding_selection, required_before: patch_proposal}
+  - {name: exact_before_after_confirmation, required_before: patch_apply}
+  - {name: skill_apply, required_before: formal_skill_write}
+  - {name: publish, required_before: public_release}
+
+stops:
+  - input_error
+  - suspected_secret
+  - snapshot_mismatch
+  - invalid_anchor
+  - fabricated_human_contribution_risk
+  - academic_integrity_risk
+  - validation_failure
+
+security:
+  evidence_is_not_instruction: true
+  secrets_read: false
+  secret_echo: false
+  network_required: false
+  prohibited_capabilities:
+    - detector_evasion
+    - ghostwriting
+    - fabricated_human_contribution
+    - bulk_rewrite_without_confirmation
+
+evaluation:
+  utility_claim: not_evaluated
+  required_real_regressions: [public-content, news, academic]
