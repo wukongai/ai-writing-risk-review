@@ -1,27 +1,34 @@
 # {{title}}
 
-- 运行：{{run_id}}
-- 候选版本：{{candidate_version}}
-- 场景 Profile：{{profile_id}}
-- 文档类型：{{document_kind}}
+版本：{{candidate_version}} · 场景：{{profile_id}} · 运行：{{run_id}}
 
-## 表达形态层
+## 一句话结论
 
-{{ai_text_trace}}
+{{plain_summary}}
 
-## 创作贡献层
+## 健康概览
 
-{{creative_contribution}}
+{{health_overview}}
 
-## 证据归属层
+健康分为 0—10，越高越好；等于 10 减对应层风险分。各层独立，不计算综合总分，不表示作者身份或 AI 来源概率。
 
-{{evidence_attribution}}
+## 优先动作
 
-## 真人创作证据保护清单
+{{priority_actions}}
+
+## 各维度详细体检
+
+{{plain_layers}}
+
+## 必须保护的内容与表达
 
 {{human_creation_evidence}}
 
-## Findings
+## 需要作者补充的信息
+
+{{author_questions}}
+
+## 完整依据
 
 {{findings}}
 
@@ -29,8 +36,4 @@
 
 {{evidence_coverage}}
 
-## 未使用或缺失输入
-
-{{unused_inputs}}
-
-> 只展示本次选择的层，各层分别评分、分别结论，不计算综合总分。报告不判断文本由谁生成，不承诺平台结果，不提供检测规避；默认不修改原文。
+> 只展示本次选择的层。未评分不表示低风险。结构校验不证明事实真实或实际效果，不承诺平台结果，不提供检测规避；默认不修改原文。

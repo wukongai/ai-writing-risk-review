@@ -28,3 +28,9 @@ ai-writing-risk-review-report/v1 使用 layer_results，且只能包含 manifest
 提案绑定 SHA、用户选择的 finding 和 HCE，并逐项记录行范围、exact before、after、事实依赖及保护证据。校验器拒绝 apply_all、整篇范围、未选择 finding、SHA 漂移、before 失配和缺少保护字段。
 
 校验通过只表示提案结构有效，不授权修改原文、安装、同步或发布。
+
+## v0.2.0 默认展示
+
+默认模板先输出完整中文体检，再输出完整依据。健康概览使用表格，避免依赖特定宿主图表插件；最多三项优先动作只来源于已登记 finding。每层解释包含现状、问题依据、局部方向、限制和五项风险分。未选择层不输出。P0 时 risk_score 为 null，risk_level 和 score_status 为 not_issued。
+
+健康分仅在渲染时计算，不改变 JSON 内部风险字段。历史报告不自动改版本；重新评审须重新生成 manifest。模板仅替换一次，文章中的双花括号不作为指令执行。

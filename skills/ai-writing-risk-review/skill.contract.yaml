@@ -3,7 +3,7 @@ kind: document_review
 owner: wukongai
 status: active
 scope: portable
-version: 0.1.2
+version: 0.2.0
 
 purpose: >-
   对 AI 辅助写作文本分别诊断机器化表达、创作贡献不足与证据归属风险，
@@ -67,6 +67,11 @@ decisions:
     - {min: 0, max: 2, risk_level: low}
     - {min: 3, max: 5, risk_level: medium}
     - {min: 6, max: 10, risk_level: high}
+  presentation:
+    health_score: ten_minus_layer_risk_score
+    higher_is_better: true
+    default_report: plain_language_complete
+    stopped_layer_score: null
   aggregation:
     cross_layer_average: forbidden
     human_evidence_offset: forbidden
@@ -115,6 +120,20 @@ security:
     - fabricated_human_contribution
     - bulk_rewrite_without_confirmation
 
+forbidden:
+  - fabricate_facts_or_human_experience
+  - infer_ai_origin_probability
+  - rewrite_without_author_confirmation
+
+tests:
+  regression_cases:
+    - tests/test_plain_report.py
+    - tests/self-test.json
+
 evaluation:
+  case_portfolio:
+    success: scripts/self_test.py
+    failure: tests/test_plain_report.py
+    high_risk: scripts/self_test.py
   utility_claim: not_evaluated
   required_real_regressions: [public-content, news, academic]

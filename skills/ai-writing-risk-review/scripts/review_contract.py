@@ -14,7 +14,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-CANDIDATE_VERSION = "0.1.2"
+CANDIDATE_VERSION = "0.2.0"
 MANIFEST_SCHEMA = "ai-writing-risk-review-manifest/v1"
 REPORT_SCHEMA = "ai-writing-risk-review-report/v1"
 PATCH_SCHEMA = "ai-writing-risk-review-patch-proposal/v1"
@@ -287,7 +287,7 @@ def derive_layer_decision(
         and item.get("severity") == "P0"
         for item in findings
     ):
-        return {"score_status": "not_issued", "risk_level": "not_issued"}
+        return {"score_status": "not_issued", "risk_score": None, "risk_level": "not_issued"}
     total = sum(scores.values())
     return {
         "score_status": "issued",
@@ -591,6 +591,9 @@ def validate_report(report: dict[str, Any], manifest: dict[str, Any]) -> list[st
     results = report.get("layer_results")
     context = manifest.get("review_context", {})
     selected_layers = context.get("requested_layers", [])
+    for finding in findings:
+        if finding.get("layer") not in selected_layers:
+            errors.append("finding belongs to an unselected layer")
     if not isinstance(results, dict):
         errors.append("layer_results must be an object")
         results = {}
@@ -747,6 +750,8 @@ def render_report(
 ) -> str:
     """Render known fields once; article-derived braces remain inert text."""
 
+    from plain_report import plain_sections
+
     results = report.get("layer_results", {})
     context = (manifest or {}).get("review_context", {})
 
@@ -772,16 +777,17 @@ def render_report(
         "evidence_coverage": json.dumps(
             report.get("evidence_coverage", {}), ensure_ascii=False, indent=2
         ),
-        "findings": _render_findings(report.get("findings", [])),
+        "findings": _render_findings([item for item in report.get("findings", [])
+                                     if item.get("layer") in results]),
         "unused_inputs": "\n".join(
             f"- {item}" for item in report.get("unused_inputs", [])
         )
         or "无。",
     }
-    rendered = template_text
-    for key, value in replacements.items():
-        rendered = rendered.replace("{{" + key + "}}", value)
-    return rendered
+    replacements.update(plain_sections(report))
+    return re.sub(r"\{\{([a-z_]+)\}\}",
+                  lambda match: replacements.get(match.group(1), match.group(0)),
+                  template_text)
 
 
 def _load_json(path: Path) -> dict[str, Any]:

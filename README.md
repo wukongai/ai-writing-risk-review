@@ -53,3 +53,17 @@ npx skills add wukongai/ai-writing-risk-review
 
 方法来源见 [METHOD_SOURCES.md](METHOD_SOURCES.md)，第三方许可边界见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
 
+
+## v0.2.0：统一的中文体检报告
+
+当前正式版本：**v0.2.0**。安装命令保持不变。
+
+- [GitHub 仓库](https://github.com/wukongai/ai-writing-risk-review)
+- [v0.2.0 发布说明](https://github.com/wukongai/ai-writing-risk-review/releases/tag/v0.2.0)
+- [完整使用手册](https://aixiaoai.cloud/cases/cmt9dnkj800m3po9whlueoyda)
+
+表达自然度、创作充实度、证据清晰度均为 0—10 分，越高越好；每项等于 10 减对应层的内部风险分。三项不合成总分，不是 AI 来源概率。内部十五细项仍为风险 0—2，越低越好，供复核。
+
+默认报告先展示结论、健康概览表、最多三项优先动作、各层解释、细项、保护清单和补充问题，再附完整依据。未选择的层不展示，停止层不评分；没有问题不凑建议。
+
+与 v0.1.2 相比，本版本改进报告可读性和评分方向说明，未增加检测模型或外部检测器。脚本负责快照、结构校验和渲染，具体文章判断由宿主 Agent 完成。旧版本报告保留原版本和风险量尺，不直接当作新版输入。

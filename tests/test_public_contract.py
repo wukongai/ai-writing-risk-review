@@ -1,5 +1,6 @@
 from pathlib import Path
 import re
+import json
 import unittest
 
 
@@ -25,8 +26,8 @@ class PublicContractTest(unittest.TestCase):
         self.assertIsNotNone(runtime_version)
         version = contract_version.group(1)
         self.assertEqual(version, runtime_version.group(1))
-        self.assertIn(f'"candidate_version": {{"const": "{version}"}}', manifest_schema)
-        self.assertIn(f'"candidate_version": {{"const": "{version}"}}', report_schema)
+        self.assertEqual(json.loads(manifest_schema)["properties"]["candidate_version"]["const"], version)
+        self.assertEqual(json.loads(report_schema)["properties"]["candidate_version"]["const"], version)
 
 
 if __name__ == "__main__":

@@ -134,9 +134,16 @@ def main() -> int:
     patch_errors = contract.validate_patch_proposal(proposal, manifest, normalized)
     errors.extend(patch_errors)
 
+    rendered = contract.render_report(report, (ROOT / "assets/report-template.md").read_text(), manifest)
+    plain_ok = "| 证据清晰度 | 9/10 |" in rendered and "优先动作" in rendered
+    if not plain_ok:
+        errors.append("plain report health presentation failed")
+
     payload = {
+        "version": contract.CANDIDATE_VERSION,
         "ok": not errors,
         "checks": {
+            "plain_report_rendered": plain_ok,
             "valid_three_layer_report": not contract.validate_report(report, manifest),
             "detector_evasion_rejected": bool(capability_errors),
             "neutral_device_gate_enforced": bool(gate_errors),
